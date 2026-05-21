@@ -1,0 +1,176 @@
+# Solar System Card — Design
+
+## Architecture Overview
+
+```mermaid
+graph TB
+    subgraph browser["Browser — card.js Tier 1, no sidecar"]
+        CARD[card.js<br/>CARD_SHIM global<br/>mica injected]
+        CARD -->|creates| SCENE[Three.js Scene]
+        CARD -->|creates| RENDERER[WebGL Renderer<br/>antialias + alpha]
+        CARD -->|creates| CAMERA[Perspective Camera<br/>FOV 60 degrees]
+        CARD -->|controls| CTRL[OrbitControls<br/>zoom / pan / rotate]
+        SCENE -->|contains| SUN[Sun mesh<br/>emissive glow]
+        SCENE -->|contains| PLANETS[8 Planet meshes<br/>MeshStandardMaterial]
+        SCENE -->|contains| RINGS[Saturn RingGeometry<br/>ring texture]
+        SCENE -->|contains| ORBITS[Orbital path lines<br/>THREE.Line dashed]
+        SCENE -->|contains| STARS[Starfield<br/>THREE.Points]
+        SCENE -->|contains| LABELS[Planet name labels<br/>HTML overlay]
+        CARD -->|manages| ANIM[Animation loop<br/>requestAnimationFrame]
+        ANIM -->|updates| ORBITAL[Orbital positions<br/>Kepler third law]
+        ANIM -->|updates| ROTATION[Axial rotation]
+        CARD -->|drives| INFO[Info panel<br/>DOM overlay]
+        CARD -->|loads via| TEX[THREE.TextureLoader<br/>NASA / Wikimedia URLs]
+        TEX -->|fallback| COLOR[Procedural color sphere]
+        CARD -->|disposes via| DESTROY[onDestroy hook]
+    end
+
+    subgraph external["External resources"]
+        CDN[Three.js 0.160.0 UMD<br/>cdn.jsdelivr.net/npm]
+        CTRL_ESM[OrbitControls ESM<br/>dynamic import]
+        TEX_NASA[NASA / Wikimedia<br/>public-domain textures]
+    end
+
+    CDN -->|metadata.scripts| CARD
+    CTRL_ESM -->|dynamic import| CARD
+    TEX_NASA -->|TextureLoader URLs| TEX
+```
+
+## Component Breakdown
+
+```mermaid
+graph LR
+    subgraph cardClass["solar-system card class"]
+        META[metadata.json<br/>name: solar-system<br/>badge: SST<br/>handler: ~<br/>sidecar: ~<br/>scripts: three.min.js]
+        HTML[card.html<br/>fragment — empty<br/>Three.js renders into container]
+        CSS[card.css<br/>overlay styles —<br/>labels, info panel,<br/>starfield cursor]
+        JS[card.js<br/>main logic —<br/>init / animate / cleanup]
+    end
+
+    META -->|registers| CLASS
+    HTML -->|paired with| CLASS
+    CSS -->|paired with| CLASS
+    JS -->|paired with| CLASS
+
+    CLASS -->|instances on| CANVAS[canvas/ — .solar-system extension]
+```
+
+## Data Flow — Init to Animate
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as card.js
+    participant T as Three.js
+    participant L as TextureLoader
+    participant A as Animation loop
+
+    U->>C: Card loads on canvas
+    C->>C: Create scene, camera, renderer
+    C->>C: Add OrbitControls
+    C->>C: Create Sun mesh (emissive)
+    C->>C: Create 8 planet meshes
+    C->>C: Create Saturn ring geometry
+    C->>C: Create orbital path lines
+    C->>C: Create starfield points
+    C->>C: Create HTML labels + info panel
+
+    C->>L: Load textures (parallel)
+    L-->>C: Textures loaded or fallback
+    C->>T: Append scene to container
+    C->>T: Set up resize handler
+
+    loop every frame
+        A->>C: requestAnimationFrame
+        C->>A: Update orbital positions<br/>Kepler's law: omega = 2*PI/T
+        C->>A: Rotate planets on axis
+        C->>T: Render scene
+        C->>C: Update label positions
+    end
+
+    U->>C: User zooms / pans / rotates
+    C->>C: OrbitControls handles input
+    C->>T: Re-render with new camera
+```
+
+## Planet Data Model
+
+```mermaid
+classDiagram
+    class PlanetConfig {
+        +string name
+        +float distance
+        +float period
+        +float size
+        +float tilt
+        +float speed
+        +string textureUrl
+        +string color
+    }
+
+    class Planet {
+        +Mesh mesh
+        +Group group
+        +float phase
+        +float angle
+        +update(time)
+        +rotate()
+        +dispose()
+    }
+
+    class SaturnRings {
+        +Mesh ringMesh
+        +RingGeometry geometry
+        +update()
+        +dispose()
+    }
+
+    class Starfield {
+        +Points points
+        +BufferGeometry geometry
+        +createStars(count)
+        +dispose()
+    }
+
+    class InfoPanel {
+        +HTMLElement container
+        +showPlanet(name, info)
+        +hide()
+    }
+
+    PlanetConfig --> Planet : configures
+    Planet *-- SaturnRings
+    PlanetConfig : 8 instances --> Planet
+```
+
+## File Layout
+
+```mermaid
+graph LR
+    ROOT[.mica/card-classes/solar-system/]
+    ROOT --> META[metadata.json]
+    ROOT --> HTML[card.html]
+    ROOT --> CSS[card.css]
+    ROOT --> JS[card.js]
+
+    CANVAS[canvas/]
+    CANVAS --> S1[solar-system.solar-system<br/>card instance]
+
+    META -.->|extends| CLASS
+    HTML -.->|extends| CLASS
+    CSS -.->|extends| CLASS
+    JS -.->|extends| CLASS
+
+    class ROOT fill:#2d2d2d,stroke:#666,color:#fff
+    class META,HTML,CSS,JS fill:#1e1e1e,stroke:#444,color:#ccc
+    class CANVAS,S1 fill:#252526,stroke:#555,color:#aaa
+```
+
+## Key Invariants
+
+- **No sidecar** — all computation is client-side (Tier 1). No server.py or server.ts needed.
+- **No handler** — no LLM, no classification, no subprocess. `handler: ~` in metadata.
+- **Texture fallback** — if any NASA texture fails to load, a procedural colored sphere is used. No crash.
+- **Cleanup** — `onDestroy` disposes all Three.js geometries, materials, textures, and cancels `requestAnimationFrame`.
+- **No localStorage** — no persistence. Each card instance is fresh.
+- **No mica API calls** — the card does not call `mica.files`, `mica.openChannel`, or `mica.fetch`. It is purely self-contained.

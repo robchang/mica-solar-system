@@ -1,0 +1,147 @@
+.solar-system-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #fff;
+}
+
+.ss-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ss-canvas-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.ss-info-panel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 220px;
+  background: rgba(10, 10, 30, 0.85);
+  border: 1px solid rgba(100, 120, 200, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+}
+
+.ss-info-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #8899dd;
+  border-bottom: 1px solid rgba(100, 120, 200, 0.2);
+  padding-bottom: 6px;
+}
+
+.ss-info-body {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ss-info-row {
+  margin-bottom: 4px;
+}
+
+.ss-info-label {
+  color: #99aacc;
+  font-weight: 500;
+}
+
+.ss-planet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ss-planet-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+  font-size: 12px;
+}
+
+.ss-planet-item:hover {
+  background: rgba(100, 120, 200, 0.2);
+}
+
+.ss-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.ss-hint {
+  color: #667799;
+  font-style: italic;
+  padding: 8px 0;
+  text-align: center;
+  font-size: 11px;
+}
+
+.ss-label {
+  position: absolute;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translate(-50%, -100%);
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  z-index: 5;
+}
+
+.ss-controls-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  background: rgba(10, 10, 30, 0.7);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 10px;
+  color: #8899bb;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(100, 120, 200, 0.15);
+}
+
+.ss-controls-hint span {
+  white-space: nowrap;
+}
+
+.ss-info-panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ss-info-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ss-info-panel::-webkit-scrollbar-thumb {
+  background: rgba(100, 120, 200, 0.3);
+  border-radius: 2px;
+}

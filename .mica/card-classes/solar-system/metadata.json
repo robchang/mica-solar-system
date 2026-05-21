@@ -1,0 +1,11 @@
+{
+  "extension": ".solar-system",
+  "badge": "SST",
+  "defaultTitle": "Solar System",
+  "dependencies": {
+    "scripts": [
+      "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"
+    ],
+    "styles": []
+  }
+}
