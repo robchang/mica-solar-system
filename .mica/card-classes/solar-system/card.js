@@ -27,42 +27,42 @@ const PLANETS = [
     name: 'Mercury', type: 'Terrestrial Planet',
     diameter: '4,879 km', dayLength: '58.6 Earth days', moons: 0,
     temp: '−180°C to 430°C', color: 0xA5A5A5, size: 0.35,
-    orbitRadius: 2.0, orbitSpeed: 4.15, axialTilt: 0.03 * Math.PI / 180,
+    orbitRadius: 2.8, orbitSpeed: 4.15, axialTilt: 0.03 * Math.PI / 180,
     rotationSpeed: 0.017, textureUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Solarsystemscope_texture_2k_mercury.jpg'
   },
   {
     name: 'Venus', type: 'Terrestrial Planet',
     diameter: '12,104 km', dayLength: '243 Earth days', moons: 0,
     temp: '~465°C', color: 0xE8CD6A, size: 0.6,
-    orbitRadius: 3.0, orbitSpeed: 1.62, axialTilt: 177.4 * Math.PI / 180,
+    orbitRadius: 5.0, orbitSpeed: 1.62, axialTilt: 177.4 * Math.PI / 180,
     rotationSpeed: -0.004, textureUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/40/Solarsystemscope_texture_2k_venus_surface.jpg'
   },
   {
     name: 'Earth', type: 'Terrestrial Planet',
     diameter: '12,756 km', dayLength: '24 hours', moons: 1,
     temp: '−50°C to 50°C', color: 0x2266CC, size: 0.65,
-    orbitRadius: 4.2, orbitSpeed: 1.0, axialTilt: 23.4 * Math.PI / 180,
+    orbitRadius: 7.5, orbitSpeed: 1.0, axialTilt: 23.4 * Math.PI / 180,
     rotationSpeed: 0.5, textureUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Solarsystemscope_texture_2k_earth_daymap.jpg'
   },
   {
     name: 'Mars', type: 'Terrestrial Planet',
     diameter: '6,792 km', dayLength: '24.6 hours', moons: 2,
     temp: '−140°C to 30°C', color: 0xCC5533, size: 0.45,
-    orbitRadius: 5.6, orbitSpeed: 0.53, axialTilt: 25.2 * Math.PI / 180,
+    orbitRadius: 9.5, orbitSpeed: 0.53, axialTilt: 25.2 * Math.PI / 180,
     rotationSpeed: 0.48, textureUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/46/Solarsystemscope_texture_2k_mars.jpg'
   },
   {
     name: 'Jupiter', type: 'Gas Giant',
     diameter: '142,984 km', dayLength: '9.9 hours', moons: 95,
     temp: '−110°C', color: 0xC8A070, size: 1.8,
-    orbitRadius: 8.0, orbitSpeed: 0.084, axialTilt: 3.1 * Math.PI / 180,
+    orbitRadius: 13.0, orbitSpeed: 0.084, axialTilt: 3.1 * Math.PI / 180,
     rotationSpeed: 1.2, textureUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Solarsystemscope_texture_2k_jupiter.jpg'
   },
   {
     name: 'Saturn', type: 'Gas Giant',
     diameter: '120,536 km', dayLength: '10.7 hours', moons: 146,
     temp: '−175°C', color: 0xE8D5A0, size: 1.5,
-    orbitRadius: 11.0, orbitSpeed: 0.034, axialTilt: 26.7 * Math.PI / 180,
+    orbitRadius: 17.0, orbitSpeed: 0.034, axialTilt: 26.7 * Math.PI / 180,
     rotationSpeed: 1.1, textureUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Solarsystemscope_texture_8k_saturn.jpg',
     hasRings: true
   },
@@ -70,14 +70,14 @@ const PLANETS = [
     name: 'Uranus', type: 'Ice Giant',
     diameter: '51,118 km', dayLength: '17.2 hours', moons: 28,
     temp: '−200°C', color: 0x72B5C4, size: 1.0,
-    orbitRadius: 14.0, orbitSpeed: 0.012, axialTilt: 97.8 * Math.PI / 180,
+    orbitRadius: 21.0, orbitSpeed: 0.012, axialTilt: 97.8 * Math.PI / 180,
     rotationSpeed: -0.9, textureUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Solarsystemscope_texture_2k_uranus.jpg'
   },
   {
     name: 'Neptune', type: 'Ice Giant',
     diameter: '49,528 km', dayLength: '16.1 hours', moons: 16,
     temp: '−210°C', color: 0x3355CC, size: 0.95,
-    orbitRadius: 17.0, orbitSpeed: 0.006, axialTilt: 28.3 * Math.PI / 180,
+    orbitRadius: 25.0, orbitSpeed: 0.006, axialTilt: 28.3 * Math.PI / 180,
     rotationSpeed: 1.0, textureUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Solarsystemscope_texture_2k_neptune.jpg'
   }
 ];
@@ -89,7 +89,7 @@ function initScene() {
 
   // Camera
   camera = new THREE.PerspectiveCamera(55, getAspect(), 0.1, 2000);
-  camera.position.set(15, 12, 18);
+  camera.position.set(20, 18, 25);
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: true });
@@ -103,18 +103,23 @@ function initScene() {
   controls = new THREE_ADDONS.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
-  controls.minDistance = 3;
-  controls.maxDistance = 80;
+  controls.minDistance = 5;
+  controls.maxDistance = 100;
   controls.target.set(0, 0, 0);
 
   // Lighting — Sun is the light source
-  const sunLight = new THREE.PointLight(0xffffff, 8, 200);
+  const sunLight = new THREE.PointLight(0xffffff, 12, 200);
   sunLight.position.set(0, 0, 0);
   scene.add(sunLight);
-  scene.add(new THREE.AmbientLight(0x666688, 1.0));
-  // Hemisphere fill light for better visibility
-  const hemiLight = new THREE.HemisphereLight(0x8888aa, 0x222233, 0.5);
+  // Bright ambient so dark sides of planets aren't pitch black
+  scene.add(new THREE.AmbientLight(0x999999, 2.5));
+  // Hemisphere fill for even illumination from above
+  const hemiLight = new THREE.HemisphereLight(0xaabbdd, 0x555566, 1.5);
   scene.add(hemiLight);
+  // Secondary directional fill from the side
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(5, 3, 5);
+  scene.add(dirLight);
 
   // Starfield
   createStarfield();
@@ -259,7 +264,7 @@ function createPlanet(data, index) {
   const orbitPoints = orbitCurve.getPoints(128);
   const orbitGeo = new THREE.BufferGeometry();
   orbitGeo.setFromPoints(orbitPoints.map(p => new THREE.Vector3(p.x, 0, p.y)));
-  const orbitMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.12 });
+  const orbitMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5, linewidth: 2 });
   const orbitLine = new THREE.Line(orbitGeo, orbitMat);
   scene.add(orbitLine);
   orbitLines.push(orbitLine);

@@ -82,5 +82,55 @@
     "content": "\n\nThe planets now display realistic textures. The bug was that `textureLoader` was initialized at the bottom of the script (after all function definitions), but `initScene()` called `createPlanet()` before that line executed — so `textureLoader` was `null` when the texture loads were triggered, causing them all to fail silently.\n\nFixed by initializing `textureLoader` inside `initScene()` before creating planets.",
     "agent": "Qwen",
     "turn_id": "0cab22e7-2666-44b1-bb9f-0642837f7260"
+  },
+  {
+    "role": "user",
+    "content": "planets are hard to see. add another illumination source"
+  },
+  {
+    "role": "assistant",
+    "content": "\n\nAdded extra illumination sources to make planets much brighter:\n\n- **Sun light**: 8 → **12** intensity\n- **Ambient light**: brighter color (0x999999) at **2.5** intensity (was 1.0)\n- **Hemisphere light**: brighter at **1.5** intensity (was 0.5)\n- **Added DirectionalLight**: 0.8 intensity from the side for extra fill\n\nPlanets should now be clearly visible with good illumination on both lit and dark sides.",
+    "agent": "Qwen",
+    "turn_id": "bc8c3954-d52d-49fb-a13e-5ddae07f929d"
+  },
+  {
+    "role": "user",
+    "content": "create a README.md file in main directory"
+  },
+  {
+    "role": "assistant",
+    "content": "\n\nREADME.md created in `/workspaces/testproj/mica-solar-system/README.md`.",
+    "agent": "Qwen",
+    "turn_id": "09297014-3b7d-42a5-94ef-fbe6445ffebf"
+  },
+  {
+    "role": "user",
+    "content": "[File activity] These canvas files changed since your last reply:\n- canvas/mica-solar-system.filebrowser (added)"
+  },
+  {
+    "role": "assistant",
+    "content": "\n\nA filebrowser card was added to the canvas. No action needed — just acknowledging the change.",
+    "agent": "Qwen",
+    "turn_id": "e7d2f6be-8a43-4e02-b663-3d58adad1dfb"
+  },
+  {
+    "role": "user",
+    "content": "make the orbital paths more prominent, and scale the relative distances between planets a bit more - planets are cramped"
+  },
+  {
+    "role": "assistant",
+    "content": "\n\nDone. I made these changes:\n\n**Orbital paths:**\n- Opacity: 0.12 → **0.5** (4x more visible)\n- Added `linewidth: 2` for thicker lines\n\n**Planet spacing (orbit radii scaled up):**\n| Planet | Before | After |\n|--------|--------|-------|\n| Mercury | 2.0 | 2.8 |\n| Venus | 3.0 | 5.0 |\n| Earth | 4.2 | 7.5 |\n| Mars | 5.6 | 9.5 |\n| Jupiter | 8.0 | 13.0 |\n| Saturn | 11.0 | 17.0 |\n| Uranus | 14.0 | 21.0 |\n| Neptune | 17.0 | 25.0 |\n\n**Camera:**\n- Position moved back to better frame the expanded system: (15,12,18) → (20,18,25)\n- Min zoom: 3 → 5, Max zoom: 80 → 100\n\nThe planets should now be much more spread out and the orbital paths clearly visible.",
+    "agent": "Qwen",
+    "turn_id": "a6c448f2-0579-47b6-8a42-ac2ff33391ac"
+  },
+  {
+    "role": "user",
+    "content": "[File activity] These canvas files changed since your last reply:\n- canvas/solar-system.terminal (deleted)"
+  },
+  {
+    "role": "assistant",
+    "content": "\n\nNoted — the terminal card was deleted from the canvas. No action needed.",
+    "agent": "Qwen",
+    "turn_id": "de655375-6abd-4106-97b0-13540d5b451d"
   }
 ]
