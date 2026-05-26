@@ -2,6 +2,8 @@
 
 An interactive 3D solar system visualization built as a [Mica](https://github.com/anthropics/mica) canvas card.
 
+<img width="5116" height="2718" alt="solar" src="https://github.com/user-attachments/assets/0d9ad7dd-6848-4668-b10d-a956bdcc3e3c" />
+
 ## Features
 
 - **8 planets** orbiting the Sun with realistic textures from NASA / Wikimedia Commons (CC BY 4.0)
